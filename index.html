@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduction to Angular</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --amber:  #f5a623;
+    --green:  #4ecb8d;
+    --purple: #a78bfa;
+    --blue:   #60a5fa;
+    --red:    #f87171;
+    --bg:     #0a0a0f;
+    --bg2:    #10101a;
+    --bg3:    #181824;
+    --border: #2a2a3a;
+    --text:   #e8e8f0;
+    --muted:  #8888a8;
+  }
+
+  .reveal-viewport { background: var(--bg); }
+  .reveal .slides section { background: transparent; }
+
+  .reveal { font-family: 'DM Sans', sans-serif; color: var(--text); }
+  .reveal h1, .reveal h2, .reveal h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+  .reveal h1 { font-size: 1.6em; color: var(--amber); line-height: 1.1; }
+  .reveal h2 { font-size: 1.1em; color: var(--amber); margin-bottom: .2em; }
+  .reveal h3 { font-size: .78em; color: var(--green); margin-bottom: .15em; }
+  .reveal p  { font-size: .56em; line-height: 1.45; color: var(--text); }
+  .reveal li { font-size: .54em; line-height: 1.45; margin-bottom: .1em; }
+  .reveal code { font-family: 'JetBrains Mono', monospace; font-size: .72em; }
+  .reveal pre  { box-shadow: none; background: var(--bg3); border: 1px solid var(--border);
+                 border-radius: 6px; padding: .3em .5em; margin: .25em 0; }
+  .reveal pre code { font-size: .52em; line-height: 1.35; background: transparent; color: #cdd6f4; }
+
+  .slide-hdr {
+    display: flex; align-items: center; gap: .4em;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: .2em; margin-bottom: .3em;
+  }
+  .slide-hdr .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .42em; font-weight: 500;
+    color: var(--bg); background: var(--amber);
+    padding: .1em .4em; border-radius: 3px;
+    letter-spacing: .04em;
+  }
+  .slide-hdr h2 { margin: 0; font-size: .95em; }
+
+  .cols   { display: grid; gap: .5em; }
+  .cols-2 { grid-template-columns: 1fr 1fr; }
+  .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .cols-6040 { grid-template-columns: 6fr 4fr; }
+  .cols-4060 { grid-template-columns: 4fr 6fr; }
+
+  .card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 6px; padding: .35em .6em;
+  }
+  .card.amber { border-left: 3px solid var(--amber); }
+  .card.green { border-left: 3px solid var(--green); }
+  .card.purple{ border-left: 3px solid var(--purple); }
+  .card.blue  { border-left: 3px solid var(--blue); }
+  .card.red   { border-left: 3px solid var(--red); }
+  .card h3 { font-size: .64em; margin: 0 0 .12em; }
+  .card p  { font-size: .52em; margin: 0; color: #b8b8d0; }
+  .card ul { margin: 0; padding-left: 1em; }
+  .card li { font-size: .52em; color: #b8b8d0; margin-bottom: .02em; }
+
+  .reveal table { width: 100%; border-collapse: collapse; font-size: .5em; }
+  .reveal table th { background: var(--bg3); color: var(--amber); font-weight: 600;
+                     padding: .2em .4em; border: 1px solid var(--border); text-align: left; }
+  .reveal table td { padding: .18em .4em; border: 1px solid var(--border); color: #ccc; }
+  .reveal table tr:nth-child(even) td { background: #0e0e18; }
+
+  .a  { color: var(--amber); font-weight: 600; }
+  .g  { color: var(--green); font-weight: 600; }
+  .p  { color: var(--purple); font-weight: 600; }
+  .b  { color: var(--blue); font-weight: 600; }
+  .r  { color: var(--red); font-weight: 600; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  svg.diagram { display: block; margin: 0 auto; overflow: visible; }
+
+  .pill {
+    display: inline-block; font-family: 'JetBrains Mono', monospace;
+    font-size: .44em; padding: .08em .4em; border-radius: 99px;
+    border: 1px solid; margin: 0 .08em;
+  }
+  .pill.amber { color: var(--amber); border-color: var(--amber); }
+  .pill.green { color: var(--green); border-color: var(--green); }
+  .pill.purple{ color: var(--purple); border-color: var(--purple); }
+  .pill.blue  { color: var(--blue); border-color: var(--blue); }
+
+  .reveal .slide-footer { display: none; }
+  .title-slide h1 { font-size: 1.8em; }
+  .title-slide .subtitle {
+    font-size: .7em; color: var(--green); font-family: 'DM Sans', sans-serif;
+    font-weight: 300; letter-spacing: .04em; margin: .3em 0 .6em;
+  }
+  .title-slide .meta { font-size: .48em; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+  .reveal ul, .reveal ol { margin: .15em 0 .15em 1em; }
+  .reveal .slides > section { display: flex !important; flex-direction: column !important; overflow-y: auto !important; align-items: stretch !important; justify-content: flex-start !important; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============================================================ SLIDE 01 -->
+<section class="title-slide" data-background-color="#0a0a0f">
+  <div style="text-align:left; max-width:820px; margin:0 auto; padding: 1em 0;">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:.5em; color:var(--muted); margin-bottom:.4em; letter-spacing:.1em;">
+      TECHNICAL PRESENTATION
+    </div>
+    <h1>Introduction to<br>Angular</h1>
+    <div class="subtitle">The Full-Featured TypeScript Framework</div>
+    <div style="width:60px; height:3px; background:var(--amber); margin-bottom:1.4em;"></div>
+    <div class="meta">TypeScript &middot; components &middot; signals &middot; DI &middot; RxJS &middot; CLI</div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 02 -->
+<section>
+  <div class="slide-hdr"><span class="tag">02</span><h2>Agenda</h2></div>
+  <div class="cols cols-2">
+    <div class="card amber">
+      <h3>Foundations</h3>
+      <ul>
+        <li>What Is Angular?</li>
+        <li>Architecture Overview</li>
+        <li>The Angular CLI</li>
+        <li>Components &amp; Templates</li>
+        <li>Data Binding</li>
+      </ul>
+    </div>
+    <div class="card green">
+      <h3>Core Concepts</h3>
+      <ul>
+        <li>Directives</li>
+        <li>Signals &amp; Reactive State</li>
+        <li>Services &amp; Dependency Injection</li>
+        <li>RxJS &amp; Observables</li>
+        <li>Routing &amp; Navigation</li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h3>Practical Patterns</h3>
+      <ul>
+        <li>Forms (Template &amp; Reactive)</li>
+        <li>HTTP Client</li>
+        <li>Pipes</li>
+        <li>Component Communication</li>
+        <li>Standalone Components</li>
+      </ul>
+    </div>
+    <div class="card blue">
+      <h3>Production</h3>
+      <ul>
+        <li>Testing Strategies</li>
+        <li>Performance &amp; Build</li>
+        <li>Summary &amp; Next Steps</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:.4em; color:var(--muted); font-size:.46em; text-align:center;">
+    20 slides &middot; Real code examples throughout &middot; Angular v17+ focus
+  </p>
+</section>
+
+<!-- ============================================================ SLIDE 03 -->
+<section>
+  <div class="slide-hdr"><span class="tag">03</span><h2>What Is Angular?</h2></div>
+  <p>Angular is a <span class="a">full-featured, opinionated TypeScript framework</span> maintained by Google for building single-page applications and progressive web apps.</p>
+  <div class="cols cols-6040">
+    <div>
+      <table>
+        <tr><th>Year</th><th>Milestone</th></tr>
+        <tr><td>2010</td><td>AngularJS (v1.x) released by Google</td></tr>
+        <tr><td>2016</td><td>Angular 2 — complete rewrite in TypeScript</td></tr>
+        <tr><td>2017-2022</td><td>Angular 4-14 — Ivy renderer, strict mode</td></tr>
+        <tr><td>2023</td><td>Angular 16-17 — signals, new control flow, esbuild</td></tr>
+        <tr><td>2024</td><td>Angular 18-19 — zoneless, stable signals</td></tr>
+      </table>
+    </div>
+    <div class="card green">
+      <h3>Key Properties</h3>
+      <ul>
+        <li><span class="a">TypeScript-first</span> — types built in</li>
+        <li><span class="g">Batteries included</span> — router, forms, HTTP, testing</li>
+        <li><span class="p">Dependency Injection</span> — hierarchical IoC</li>
+        <li><span class="b">Reactive</span> — RxJS + Signals</li>
+        <li><span class="r">CLI-driven</span> — scaffolding &amp; build in one tool</li>
+      </ul>
+    </div>
+  </div>
+  <p style="color:var(--muted); font-size:.46em;">Angular is <em>not</em> AngularJS. The modern framework (v2+) is a complete rewrite with a fundamentally different architecture.</p>
+</section>
+
+<!-- ============================================================ SLIDE 04 -->
+<section>
+  <div class="slide-hdr"><span class="tag">04</span><h2>Angular Architecture</h2></div>
+  <svg class="diagram" viewBox="0 0 700 160" width="700" height="160">
+    <rect x="10" y="10" width="120" height="50" rx="6" fill="#10101a" stroke="#f5a623" stroke-width="1.5"/>
+    <text x="70" y="40" text-anchor="middle" fill="#f5a623" font-size="13" font-family="DM Sans">Modules</text>
+    <rect x="155" y="10" width="120" height="50" rx="6" fill="#10101a" stroke="#4ecb8d" stroke-width="1.5"/>
+    <text x="215" y="40" text-anchor="middle" fill="#4ecb8d" font-size="13" font-family="DM Sans">Components</text>
+    <rect x="300" y="10" width="120" height="50" rx="6" fill="#10101a" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="360" y="40" text-anchor="middle" fill="#a78bfa" font-size="13" font-family="DM Sans">Services</text>
+    <rect x="445" y="10" width="120" height="50" rx="6" fill="#10101a" stroke="#60a5fa" stroke-width="1.5"/>
+    <text x="505" y="40" text-anchor="middle" fill="#60a5fa" font-size="13" font-family="DM Sans">Directives</text>
+    <rect x="590" y="10" width="100" height="50" rx="6" fill="#10101a" stroke="#f87171" stroke-width="1.5"/>
+    <text x="640" y="40" text-anchor="middle" fill="#f87171" font-size="13" font-family="DM Sans">Pipes</text>
+    <line x1="130" y1="35" x2="155" y2="35" stroke="#2a2a3a" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="275" y1="35" x2="300" y2="35" stroke="#2a2a3a" stroke-width="1.5"/>
+    <line x1="420" y1="35" x2="445" y2="35" stroke="#2a2a3a" stroke-width="1.5"/>
+    <line x1="565" y1="35" x2="590" y2="35" stroke="#2a2a3a" stroke-width="1.5"/>
+    <rect x="10" y="90" width="680" height="55" rx="6" fill="#10101a" stroke="#2a2a3a" stroke-width="1"/>
+    <text x="350" y="115" text-anchor="middle" fill="#8888a8" font-size="12" font-family="JetBrains Mono">Dependency Injection &middot; Change Detection &middot; Renderer &middot; Zone.js / Zoneless</text>
+    <text x="350" y="133" text-anchor="middle" fill="#555" font-size="11" font-family="DM Sans">Angular Runtime Platform</text>
+  </svg>
+  <div class="cols cols-3" style="margin-top:.3em;">
+    <div class="card amber">
+      <h3>Modules (NgModule)</h3>
+      <p>Organise related code into cohesive blocks. Standalone components are replacing NgModules in modern Angular.</p>
+    </div>
+    <div class="card green">
+      <h3>Components</h3>
+      <p>Building blocks of the UI. Each has a TypeScript class, an HTML template, and optional CSS styles.</p>
+    </div>
+    <div class="card purple">
+      <h3>Services &amp; DI</h3>
+      <p>Encapsulate business logic and data access. Injected via Angular's hierarchical injector system.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 05 -->
+<section>
+  <div class="slide-hdr"><span class="tag">05</span><h2>The Angular CLI</h2></div>
+  <p>The <span class="a">@angular/cli</span> is the official tool for creating, developing, scaffolding, and building Angular projects.</p>
+  <div class="cols cols-2">
+    <div>
+      <pre><code class="language-bash"># Install the CLI globally
+npm install -g @angular/cli
+
+# Create a new project
+ng new my-app --style=scss --routing
+
+# Serve with live reload
+ng serve --open
+
+# Generate artifacts
+ng generate component features/dashboard
+ng generate service core/auth
+ng generate pipe shared/truncate
+ng generate guard auth/role</code></pre>
+    </div>
+    <div>
+      <table>
+        <tr><th>Command</th><th>Purpose</th></tr>
+        <tr><td><code>ng new</code></td><td>Scaffold a full project</td></tr>
+        <tr><td><code>ng serve</code></td><td>Dev server with HMR</td></tr>
+        <tr><td><code>ng generate</code></td><td>Create components, services, etc.</td></tr>
+        <tr><td><code>ng build</code></td><td>Production build (AOT + tree-shake)</td></tr>
+        <tr><td><code>ng test</code></td><td>Run unit tests (Karma/Jest)</td></tr>
+        <tr><td><code>ng lint</code></td><td>Lint with ESLint</td></tr>
+        <tr><td><code>ng update</code></td><td>Update Angular + run migrations</td></tr>
+        <tr><td><code>ng add</code></td><td>Add libraries with schematics</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 06 -->
+<section>
+  <div class="slide-hdr"><span class="tag">06</span><h2>Components &amp; Templates</h2></div>
+  <div class="cols cols-6040">
+    <div>
+      <pre><code class="language-typescript">import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-hero-card',
+  standalone: true,
+  template: `
+    &lt;div class="hero-card"&gt;
+      &lt;h2&gt;{{ hero.name }}&lt;/h2&gt;
+      &lt;p&gt;Power: {{ hero.power }}&lt;/p&gt;
+      &lt;button (click)="onSelect()"&gt;
+        Select
+      &lt;/button&gt;
+    &lt;/div&gt;
+  `,
+  styles: [`
+    .hero-card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+  `]
+})
+export class HeroCardComponent {
+  hero = { name: 'Windstorm', power: 'Weather' };
+
+  onSelect() {
+    console.log(`Selected: ${this.hero.name}`);
+  }
+}</code></pre>
+    </div>
+    <div>
+      <div class="card amber">
+        <h3>@Component Decorator</h3>
+        <ul>
+          <li><code>selector</code> — custom HTML tag name</li>
+          <li><code>template / templateUrl</code> — inline or external HTML</li>
+          <li><code>styles / styleUrls</code> — scoped CSS</li>
+          <li><code>standalone</code> — no NgModule needed</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:.4em;">
+        <h3>Template Syntax</h3>
+        <ul>
+          <li><code>{{ expr }}</code> — interpolation</li>
+          <li><code>[prop]="expr"</code> — property binding</li>
+          <li><code>(event)="handler()"</code> — event binding</li>
+          <li><code>[(ngModel)]="val"</code> — two-way binding</li>
+        </ul>
+      </div>
+      <div class="card purple" style="margin-top:.4em;">
+        <h3>Lifecycle Hooks</h3>
+        <ul>
+          <li><code>ngOnInit</code> — after first data binding</li>
+          <li><code>ngOnChanges</code> — when inputs change</li>
+          <li><code>ngOnDestroy</code> — cleanup subscriptions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 07 -->
+<section>
+  <div class="slide-hdr"><span class="tag">07</span><h2>Data Binding</h2></div>
+  <p>Angular provides <span class="a">four forms of data binding</span> that connect the component class to the template.</p>
+  <div class="cols cols-2">
+    <div class="card amber">
+      <h3>Interpolation (one-way, class → view)</h3>
+      <pre><code class="language-html">&lt;h1&gt;Welcome, {{ user.name }}!&lt;/h1&gt;
+&lt;p&gt;Total: {{ getTotal() | currency }}&lt;/p&gt;</code></pre>
+    </div>
+    <div class="card green">
+      <h3>Property Binding (one-way, class → view)</h3>
+      <pre><code class="language-html">&lt;img [src]="imageUrl" [alt]="imageAlt"&gt;
+&lt;button [disabled]="isLoading"&gt;Submit&lt;/button&gt;
+&lt;div [class.active]="isActive"&gt;&lt;/div&gt;</code></pre>
+    </div>
+    <div class="card purple">
+      <h3>Event Binding (one-way, view → class)</h3>
+      <pre><code class="language-html">&lt;button (click)="save()"&gt;Save&lt;/button&gt;
+&lt;input (keyup.enter)="search(term)"&gt;
+&lt;div (mouseover)="highlight($event)"&gt;&lt;/div&gt;</code></pre>
+    </div>
+    <div class="card blue">
+      <h3>Two-Way Binding (class ↔ view)</h3>
+      <pre><code class="language-html">&lt;!-- Requires FormsModule --&gt;
+&lt;input [(ngModel)]="username"&gt;
+
+&lt;!-- Desugared equivalent --&gt;
+&lt;input [ngModel]="username"
+       (ngModelChange)="username = $event"&gt;</code></pre>
+    </div>
+  </div>
+  <table style="margin-top:.3em;">
+    <tr><th>Syntax</th><th>Direction</th><th>Example</th></tr>
+    <tr><td><code>{{ }}</code></td><td>Component → DOM</td><td>Text interpolation</td></tr>
+    <tr><td><code>[ ]</code></td><td>Component → DOM</td><td>Property / attribute / class / style</td></tr>
+    <tr><td><code>( )</code></td><td>DOM → Component</td><td>User events (click, keyup, etc.)</td></tr>
+    <tr><td><code>[( )]</code></td><td>Both</td><td>Form inputs with ngModel</td></tr>
+  </table>
+</section>
+
+<!-- ============================================================ SLIDE 08 -->
+<section>
+  <div class="slide-hdr"><span class="tag">08</span><h2>Directives</h2></div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3>Legacy Structural Directives</h3>
+        <pre><code class="language-html">&lt;!-- *ngIf --&gt;
+&lt;div *ngIf="user; else noUser"&gt;
+  Hello, {{ user.name }}
+&lt;/div&gt;
+&lt;ng-template #noUser&gt;
+  &lt;p&gt;Please log in&lt;/p&gt;
+&lt;/ng-template&gt;
+
+&lt;!-- *ngFor --&gt;
+&lt;li *ngFor="let item of items;
+     trackBy: trackById; let i = index"&gt;
+  {{ i + 1 }}. {{ item.name }}
+&lt;/li&gt;
+
+&lt;!-- *ngSwitch --&gt;
+&lt;div [ngSwitch]="role"&gt;
+  &lt;p *ngSwitchCase="'admin'"&gt;Admin&lt;/p&gt;
+  &lt;p *ngSwitchDefault&gt;User&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="card green">
+        <h3>New Built-in Control Flow (v17+)</h3>
+        <pre><code class="language-html">&lt;!-- @if / @else --&gt;
+@if (user) {
+  &lt;p&gt;Hello, {{ user.name }}&lt;/p&gt;
+} @else {
+  &lt;p&gt;Please log in&lt;/p&gt;
+}
+
+&lt;!-- @for with required track --&gt;
+@for (item of items; track item.id) {
+  &lt;li&gt;{{ item.name }}&lt;/li&gt;
+} @empty {
+  &lt;li&gt;No items found&lt;/li&gt;
+}
+
+&lt;!-- @switch --&gt;
+@switch (role) {
+  @case ('admin') { &lt;p&gt;Admin&lt;/p&gt; }
+  @default { &lt;p&gt;User&lt;/p&gt; }
+}</code></pre>
+      </div>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>Attribute Directives</h3>
+        <ul>
+          <li><code>ngClass</code> — conditional CSS classes</li>
+          <li><code>ngStyle</code> — conditional inline styles</li>
+          <li>Custom: <code>@Directive({ selector: '[appHighlight]' })</code></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 09 -->
+<section>
+  <div class="slide-hdr"><span class="tag">09</span><h2>Signals &amp; Reactive State</h2></div>
+  <p>Angular <span class="a">Signals</span> (stable in v17+) provide fine-grained, synchronous reactivity without Zone.js.</p>
+  <div class="cols cols-6040">
+    <div>
+      <pre><code class="language-typescript">import {
+  signal, computed, effect
+} from '@angular/core';
+
+@Component({
+  selector: 'app-counter',
+  standalone: true,
+  template: `
+    &lt;p&gt;Count: {{ count() }}&lt;/p&gt;
+    &lt;p&gt;Double: {{ double() }}&lt;/p&gt;
+    &lt;button (click)="increment()"&gt;+1&lt;/button&gt;
+  `
+})
+export class CounterComponent {
+  // Writable signal
+  count = signal(0);
+
+  // Computed (read-only, auto-tracked)
+  double = computed(() =&gt; this.count() * 2);
+
+  constructor() {
+    // Side-effect that re-runs on change
+    effect(() =&gt; {
+      console.log('Count changed:', this.count());
+    });
+  }
+
+  increment() {
+    this.count.update(c =&gt; c + 1);
+  }
+}</code></pre>
+    </div>
+    <div>
+      <div class="card amber">
+        <h3>signal()</h3>
+        <p>Creates a writable reactive value. Read by calling it as a function. Mutate with <code>.set()</code>, <code>.update()</code>, or <code>.mutate()</code>.</p>
+      </div>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>computed()</h3>
+        <p>Derives a read-only signal from other signals. Lazily evaluated and memoized — only recalculates when dependencies change.</p>
+      </div>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>effect()</h3>
+        <p>Runs a side-effect whenever tracked signals change. Useful for logging, localStorage sync, or analytics.</p>
+      </div>
+      <div class="card blue" style="margin-top:.3em;">
+        <h3>Signals vs RxJS</h3>
+        <ul>
+          <li>Signals: synchronous, simple state</li>
+          <li>RxJS: async streams, complex transformations</li>
+          <li><code>toSignal()</code> / <code>toObservable()</code> for interop</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 10 -->
+<section>
+  <div class="slide-hdr"><span class="tag">10</span><h2>Services &amp; Dependency Injection</h2></div>
+  <div class="cols cols-6040">
+    <div>
+      <pre><code class="language-typescript">import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable({ providedIn: 'root' })
+export class HeroService {
+  private http = inject(HttpClient);
+  private apiUrl = '/api/heroes';
+
+  getAll() {
+    return this.http.get&lt;Hero[]&gt;(this.apiUrl);
+  }
+
+  getById(id: number) {
+    return this.http.get&lt;Hero&gt;(
+      `${this.apiUrl}/${id}`
+    );
+  }
+
+  create(hero: Partial&lt;Hero&gt;) {
+    return this.http.post&lt;Hero&gt;(
+      this.apiUrl, hero
+    );
+  }
+}
+
+// Usage in a component
+@Component({ /* ... */ })
+export class HeroListComponent {
+  private heroService = inject(HeroService);
+  heroes = signal&lt;Hero[]&gt;([]);
+
+  ngOnInit() {
+    this.heroService.getAll().subscribe(
+      data =&gt; this.heroes.set(data)
+    );
+  }
+}</code></pre>
+    </div>
+    <div>
+      <div class="card amber">
+        <h3>@Injectable</h3>
+        <p><code>providedIn: 'root'</code> registers a singleton at the root injector. Tree-shakeable — only included if actually injected.</p>
+      </div>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>inject() function</h3>
+        <p>Modern alternative to constructor injection. Can be used in components, directives, pipes, and services.</p>
+      </div>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>Hierarchical Injectors</h3>
+        <ul>
+          <li><span class="a">Root</span> — app-wide singletons</li>
+          <li><span class="g">Module</span> — scoped to a lazy module</li>
+          <li><span class="p">Component</span> — new instance per component</li>
+          <li><span class="b">Element</span> — NodeInjector on the DOM tree</li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:.3em;">
+        <h3>InjectionToken</h3>
+        <pre><code class="language-typescript">export const API_URL =
+  new InjectionToken&lt;string&gt;('API_URL');
+
+// Provide it
+{ provide: API_URL, useValue: '/api' }
+
+// Inject it
+url = inject(API_URL);</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 11 -->
+<section>
+  <div class="slide-hdr"><span class="tag">11</span><h2>RxJS &amp; Observables</h2></div>
+  <div class="cols cols-2">
+    <div>
+      <pre><code class="language-typescript">import { Component } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Subject, switchMap, debounceTime,
+         distinctUntilChanged, catchError,
+         of } from 'rxjs';
+import { HeroService } from './hero.service';
+
+@Component({
+  selector: 'app-search',
+  standalone: true,
+  imports: [AsyncPipe],
+  template: `
+    &lt;input (input)="onSearch($event)"&gt;
+    @for (hero of results$ | async;
+          track hero.id) {
+      &lt;p&gt;{{ hero.name }}&lt;/p&gt;
+    }
+  `
+})
+export class SearchComponent {
+  private search$ = new Subject&lt;string&gt;();
+  private heroService = inject(HeroService);
+
+  results$ = this.search$.pipe(
+    debounceTime(300),
+    distinctUntilChanged(),
+    switchMap(term =&gt;
+      this.heroService.search(term).pipe(
+        catchError(() =&gt; of([]))
+      )
+    )
+  );
+
+  onSearch(e: Event) {
+    const val = (e.target as HTMLInputElement).value;
+    this.search$.next(val);
+  }
+}</code></pre>
+    </div>
+    <div>
+      <div class="card amber">
+        <h3>Core Types</h3>
+        <ul>
+          <li><span class="a">Observable</span> — lazy stream of values</li>
+          <li><span class="g">Subject</span> — multicast, push values manually</li>
+          <li><span class="p">BehaviorSubject</span> — holds current value</li>
+          <li><span class="b">ReplaySubject</span> — replays N last values</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>Key Operators</h3>
+        <table>
+          <tr><th>Operator</th><th>Purpose</th></tr>
+          <tr><td><code>map</code></td><td>Transform emitted values</td></tr>
+          <tr><td><code>filter</code></td><td>Emit only matching values</td></tr>
+          <tr><td><code>switchMap</code></td><td>Cancel previous inner observable</td></tr>
+          <tr><td><code>mergeMap</code></td><td>Run inner observables concurrently</td></tr>
+          <tr><td><code>combineLatest</code></td><td>Combine latest from multiple streams</td></tr>
+          <tr><td><code>takeUntilDestroyed</code></td><td>Auto-unsubscribe on destroy</td></tr>
+        </table>
+      </div>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>AsyncPipe</h3>
+        <p>Subscribes in the template and auto-unsubscribes. Preferred over manual <code>.subscribe()</code> for cleaner code.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 12 -->
+<section>
+  <div class="slide-hdr"><span class="tag">12</span><h2>Routing &amp; Navigation</h2></div>
+  <div class="cols cols-6040">
+    <div>
+      <pre><code class="language-typescript">// app.routes.ts
+import { Routes } from '@angular/router';
+
+export const routes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  {
+    path: 'heroes',
+    loadComponent: () =&gt;
+      import('./heroes/list.component')
+        .then(m =&gt; m.HeroListComponent),
+  },
+  {
+    path: 'heroes/:id',
+    loadComponent: () =&gt;
+      import('./heroes/detail.component')
+        .then(m =&gt; m.HeroDetailComponent),
+    resolve: { hero: heroResolver },
+    canActivate: [authGuard],
+  },
+  {
+    path: 'admin',
+    loadChildren: () =&gt;
+      import('./admin/admin.routes')
+        .then(m =&gt; m.ADMIN_ROUTES),
+    canMatch: [adminGuard],
+  },
+  { path: '**', component: NotFoundComponent },
+];</code></pre>
+    </div>
+    <div>
+      <div class="card amber">
+        <h3>Lazy Loading</h3>
+        <p><code>loadComponent</code> and <code>loadChildren</code> split code into separate chunks — loaded on demand for faster initial load.</p>
+      </div>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>Functional Guards (v15+)</h3>
+        <pre><code class="language-typescript">export const authGuard: CanActivateFn =
+  (route, state) =&gt; {
+    const auth = inject(AuthService);
+    return auth.isLoggedIn()
+      ? true
+      : inject(Router)
+          .createUrlTree(['/login']);
+  };</code></pre>
+      </div>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>Resolvers</h3>
+        <pre><code class="language-typescript">export const heroResolver: ResolveFn&lt;Hero&gt; =
+  (route) =&gt; {
+    const id = +route.paramMap.get('id')!;
+    return inject(HeroService).getById(id);
+  };</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 13 -->
+<section>
+  <div class="slide-hdr"><span class="tag">13</span><h2>Forms</h2></div>
+  <p>Angular offers two approaches: <span class="a">Template-driven</span> (simple, directive-based) and <span class="g">Reactive</span> (explicit, code-based).</p>
+  <div class="cols cols-2">
+    <div class="card amber">
+      <h3>Template-Driven</h3>
+      <pre><code class="language-html">&lt;form #f="ngForm" (ngSubmit)="save(f)"&gt;
+  &lt;input name="name"
+         ngModel required
+         minlength="3"
+         #name="ngModel"&gt;
+  @if (name.invalid &amp;&amp; name.touched) {
+    &lt;span class="error"&gt;
+      Name is required (min 3 chars)
+    &lt;/span&gt;
+  }
+  &lt;button [disabled]="f.invalid"&gt;
+    Save
+  &lt;/button&gt;
+&lt;/form&gt;</code></pre>
+      <p style="margin-top:.2em;">Uses <code>FormsModule</code>. Good for simple forms with minimal validation.</p>
+    </div>
+    <div class="card green">
+      <h3>Reactive Forms</h3>
+      <pre><code class="language-typescript">@Component({ /* ... */ })
+export class ProfileFormComponent {
+  private fb = inject(FormBuilder);
+
+  form = this.fb.group({
+    name: ['', [
+      Validators.required,
+      Validators.minLength(3)
+    ]],
+    email: ['', [
+      Validators.required,
+      Validators.email
+    ]],
+    address: this.fb.group({
+      street: [''],
+      city: [''],
+      zip: ['', Validators.pattern(/\d{5}/)]
+    })
+  });
+
+  save() {
+    if (this.form.valid) {
+      console.log(this.form.getRawValue());
+    }
+  }
+}</code></pre>
+      <p style="margin-top:.2em;">Uses <code>ReactiveFormsModule</code>. Typed, testable, dynamic.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 14 -->
+<section>
+  <div class="slide-hdr"><span class="tag">14</span><h2>HTTP Client</h2></div>
+  <div class="cols cols-6040">
+    <div>
+      <pre><code class="language-typescript">// app.config.ts — provide HttpClient
+import { provideHttpClient, withInterceptors }
+  from '@angular/common/http';
+
+export const appConfig = {
+  providers: [
+    provideHttpClient(
+      withInterceptors([authInterceptor])
+    ),
+  ]
+};
+
+// auth.interceptor.ts
+export const authInterceptor: HttpInterceptorFn =
+  (req, next) =&gt; {
+    const token = inject(AuthService).getToken();
+    if (token) {
+      req = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
+    return next(req).pipe(
+      catchError(err =&gt; {
+        if (err.status === 401) {
+          inject(Router).navigate(['/login']);
+        }
+        return throwError(() =&gt; err);
+      })
+    );
+  };</code></pre>
+    </div>
+    <div>
+      <div class="card amber">
+        <h3>provideHttpClient()</h3>
+        <p>Standalone replacement for <code>HttpClientModule</code>. Supports functional interceptors and fetch backend.</p>
+      </div>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>Typed Responses</h3>
+        <pre><code class="language-typescript">interface Hero {
+  id: number;
+  name: string;
+  power: string;
+}
+
+this.http.get&lt;Hero[]&gt;('/api/heroes')
+  .subscribe(heroes =&gt; {
+    // heroes is Hero[]
+  });</code></pre>
+      </div>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>Error Handling</h3>
+        <ul>
+          <li><code>catchError</code> — handle per-request errors</li>
+          <li><code>retry(3)</code> — automatic retries</li>
+          <li>Interceptors — global error handling</li>
+          <li><code>HttpErrorResponse</code> — typed error object</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 15 -->
+<section>
+  <div class="slide-hdr"><span class="tag">15</span><h2>Pipes</h2></div>
+  <p>Pipes transform displayed values in templates. Angular ships with many <span class="a">built-in pipes</span> and supports <span class="g">custom pipes</span>.</p>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3>Built-in Pipes</h3>
+        <table>
+          <tr><th>Pipe</th><th>Example Output</th></tr>
+          <tr><td><code>date</code></td><td><code>{{ d | date:'mediumDate' }}</code> → Apr 6, 2026</td></tr>
+          <tr><td><code>currency</code></td><td><code>{{ 42.5 | currency:'EUR' }}</code> → €42.50</td></tr>
+          <tr><td><code>uppercase</code></td><td><code>{{ 'hello' | uppercase }}</code> → HELLO</td></tr>
+          <tr><td><code>json</code></td><td>Debug-prints object as JSON</td></tr>
+          <tr><td><code>async</code></td><td>Subscribes to Observable/Promise</td></tr>
+          <tr><td><code>slice</code></td><td>Subset of an array or string</td></tr>
+          <tr><td><code>keyvalue</code></td><td>Iterates over object entries</td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="card green">
+        <h3>Custom Pipe</h3>
+        <pre><code class="language-typescript">import { Pipe, PipeTransform } from
+  '@angular/core';
+
+@Pipe({
+  name: 'truncate',
+  standalone: true,
+  pure: true  // default
+})
+export class TruncatePipe
+  implements PipeTransform {
+
+  transform(
+    value: string,
+    limit = 50,
+    ellipsis = '...'
+  ): string {
+    if (!value) return '';
+    return value.length &gt; limit
+      ? value.substring(0, limit) + ellipsis
+      : value;
+  }
+}
+
+// Usage in template
+// {{ longText | truncate:30:'…' }}</code></pre>
+      </div>
+    </div>
+  </div>
+  <div class="cols cols-2" style="margin-top:.3em;">
+    <div class="card purple">
+      <h3>Pure Pipes</h3>
+      <p>Only re-evaluate when input <em>reference</em> changes. Default and performant.</p>
+    </div>
+    <div class="card blue">
+      <h3>Impure Pipes</h3>
+      <p>Re-evaluate on every change detection cycle. Use sparingly — <code>pure: false</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 16 -->
+<section>
+  <div class="slide-hdr"><span class="tag">16</span><h2>Component Communication</h2></div>
+  <div class="cols cols-2">
+    <div class="card amber">
+      <h3>@Input / @Output</h3>
+      <pre><code class="language-typescript">// child.component.ts
+@Component({
+  selector: 'app-child',
+  template: `
+    &lt;p&gt;{{ title }}&lt;/p&gt;
+    &lt;button (click)="notify.emit('hi')"&gt;
+      Notify Parent
+    &lt;/button&gt;
+  `
+})
+export class ChildComponent {
+  @Input({ required: true }) title!: string;
+  @Output() notify = new EventEmitter&lt;string&gt;();
+}
+
+// parent template
+&lt;app-child
+  [title]="parentTitle"
+  (notify)="onNotify($event)"&gt;
+&lt;/app-child&gt;</code></pre>
+    </div>
+    <div class="card green">
+      <h3>Signal Inputs (v17.1+)</h3>
+      <pre><code class="language-typescript">@Component({
+  selector: 'app-card',
+  template: `
+    &lt;h2&gt;{{ title() }}&lt;/h2&gt;
+    &lt;p&gt;{{ uppercaseTitle() }}&lt;/p&gt;
+  `
+})
+export class CardComponent {
+  title = input.required&lt;string&gt;();
+  subtitle = input('Default value');
+
+  uppercaseTitle = computed(
+    () =&gt; this.title().toUpperCase()
+  );
+}</code></pre>
+    </div>
+    <div class="card purple">
+      <h3>ViewChild / ContentChild</h3>
+      <pre><code class="language-typescript">@ViewChild('chart') chartRef!: ElementRef;
+@ViewChild(ChildComponent) child!: ChildComponent;
+@ContentChild(HeaderDirective) header!: HeaderDirective;</code></pre>
+    </div>
+    <div class="card blue">
+      <h3>Content Projection</h3>
+      <pre><code class="language-html">&lt;!-- card.component.html --&gt;
+&lt;div class="card"&gt;
+  &lt;ng-content select="[header]"&gt;&lt;/ng-content&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+  &lt;ng-content select="[footer]"&gt;&lt;/ng-content&gt;
+&lt;/div&gt;
+
+&lt;!-- Usage --&gt;
+&lt;app-card&gt;
+  &lt;h2 header&gt;Title&lt;/h2&gt;
+  &lt;p&gt;Body content here&lt;/p&gt;
+  &lt;button footer&gt;Action&lt;/button&gt;
+&lt;/app-card&gt;</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 17 -->
+<section>
+  <div class="slide-hdr"><span class="tag">17</span><h2>Standalone Components</h2></div>
+  <p>Since Angular 14+, components can be <span class="a">standalone</span> — no NgModule required. This is now the <span class="g">recommended default</span> in Angular 17+.</p>
+  <div class="cols cols-6040">
+    <div>
+      <pre><code class="language-typescript">// standalone component
+@Component({
+  selector: 'app-dashboard',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    HeroCardComponent,
+    TruncatePipe
+  ],
+  template: `
+    @for (hero of heroes(); track hero.id) {
+      &lt;app-hero-card [hero]="hero" /&gt;
+    }
+    &lt;a routerLink="/settings"&gt;Settings&lt;/a&gt;
+  `
+})
+export class DashboardComponent {
+  heroes = signal&lt;Hero[]&gt;([]);
+}
+
+// bootstrap without NgModule
+// main.ts
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(
+      withInterceptors([authInterceptor])
+    ),
+    provideAnimationsAsync(),
+  ]
+});</code></pre>
+    </div>
+    <div>
+      <div class="card amber">
+        <h3>Why Standalone?</h3>
+        <ul>
+          <li>Simpler mental model — no NgModule boilerplate</li>
+          <li>Better tree-shaking — imports are explicit</li>
+          <li>Easier lazy loading — <code>loadComponent</code></li>
+          <li>Faster compilation — fewer files to process</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>Migration from NgModules</h3>
+        <ul>
+          <li>CLI schematic: <code>ng g @angular/core:standalone</code></li>
+          <li>Add <code>standalone: true</code> to components</li>
+          <li>Move declarations to <code>imports</code> array</li>
+          <li>Replace module providers with <code>provide*</code> functions</li>
+        </ul>
+      </div>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>importProvidersFrom()</h3>
+        <pre><code class="language-typescript">// Bridge for libraries still using NgModule
+providers: [
+  importProvidersFrom(
+    SomeLibraryModule.forRoot()
+  )
+]</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 18 -->
+<section>
+  <div class="slide-hdr"><span class="tag">18</span><h2>Testing</h2></div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3>Unit Testing with TestBed</h3>
+        <pre><code class="language-typescript">import { ComponentFixture, TestBed }
+  from '@angular/core/testing';
+
+describe('HeroCardComponent', () =&gt; {
+  let component: HeroCardComponent;
+  let fixture: ComponentFixture&lt;
+    HeroCardComponent
+  &gt;;
+
+  beforeEach(async () =&gt; {
+    await TestBed.configureTestingModule({
+      imports: [HeroCardComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(
+      HeroCardComponent
+    );
+    component = fixture.componentInstance;
+  });
+
+  it('should display hero name', () =&gt; {
+    component.hero =
+      { id: 1, name: 'Storm', power: 'Weather' };
+    fixture.detectChanges();
+
+    const el: HTMLElement =
+      fixture.nativeElement;
+    expect(el.querySelector('h2')?.textContent)
+      .toContain('Storm');
+  });
+
+  it('should emit on select', () =&gt; {
+    spyOn(component.notify, 'emit');
+    const btn = fixture.nativeElement
+      .querySelector('button');
+    btn.click();
+    expect(component.notify.emit)
+      .toHaveBeenCalled();
+  });
+});</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="card green">
+        <h3>Service Testing</h3>
+        <pre><code class="language-typescript">describe('HeroService', () =&gt; {
+  let service: HeroService;
+  let httpMock: HttpTestingController;
+
+  beforeEach(() =&gt; {
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
+    });
+    service = TestBed.inject(HeroService);
+    httpMock = TestBed.inject(
+      HttpTestingController
+    );
+  });
+
+  it('should fetch heroes', () =&gt; {
+    service.getAll().subscribe(heroes =&gt; {
+      expect(heroes.length).toBe(2);
+    });
+    const req = httpMock.expectOne('/api/heroes');
+    req.flush([{ id: 1 }, { id: 2 }]);
+  });
+});</code></pre>
+      </div>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>Testing Stack</h3>
+        <table>
+          <tr><th>Tool</th><th>Role</th></tr>
+          <tr><td>Jasmine</td><td>Test framework (default)</td></tr>
+          <tr><td>Karma</td><td>Test runner (legacy)</td></tr>
+          <tr><td>Jest</td><td>Modern alternative (v16+)</td></tr>
+          <tr><td>Web Test Runner</td><td>Official replacement for Karma</td></tr>
+          <tr><td>Cypress / Playwright</td><td>E2E testing</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 19 -->
+<section>
+  <div class="slide-hdr"><span class="tag">19</span><h2>Performance &amp; Build</h2></div>
+  <div class="cols cols-3">
+    <div class="card amber">
+      <h3>AOT Compilation</h3>
+      <ul>
+        <li>Compiles templates at build time</li>
+        <li>Catches template errors early</li>
+        <li>Smaller bundle — no compiler shipped</li>
+        <li>Faster rendering — pre-compiled views</li>
+        <li>Default since Angular 9</li>
+      </ul>
+    </div>
+    <div class="card green">
+      <h3>Tree Shaking</h3>
+      <ul>
+        <li>Removes unused code from bundles</li>
+        <li><code>providedIn: 'root'</code> enables tree-shaking for services</li>
+        <li>Standalone imports improve tree-shaking</li>
+        <li>Webpack &amp; esbuild both support it</li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h3>Lazy Routes</h3>
+      <ul>
+        <li>Split features into separate chunks</li>
+        <li><code>loadComponent</code> / <code>loadChildren</code></li>
+        <li>Preloading strategies available</li>
+        <li>Reduces initial load time significantly</li>
+      </ul>
+    </div>
+  </div>
+  <div class="cols cols-2" style="margin-top:.3em;">
+    <div class="card blue">
+      <h3>esbuild + Vite (v17+)</h3>
+      <pre><code class="language-json">// angular.json — new builder
+{
+  "builder": "@angular-devkit/build-angular:application",
+  "options": {
+    "outputMode": "static",
+    "ssr": false
+  }
+}</code></pre>
+      <ul>
+        <li>Up to <span class="a">87% faster</span> builds than Webpack</li>
+        <li>HMR with Vite dev server</li>
+        <li>Default in Angular 17+ new projects</li>
+      </ul>
+    </div>
+    <div class="card red">
+      <h3>SSR with Angular Universal</h3>
+      <pre><code class="language-bash"># Add SSR to existing project
+ng add @angular/ssr
+
+# Generates:
+# - server.ts (Express server)
+# - app.config.server.ts
+# - Build outputs browser + server bundles</code></pre>
+      <ul>
+        <li>Server-side rendering for SEO</li>
+        <li>Hydration transfers state to client</li>
+        <li>Incremental hydration (v18+)</li>
+        <li>Pre-rendering static routes at build time</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SLIDE 20 -->
+<section>
+  <div class="slide-hdr"><span class="tag">20</span><h2>Summary &amp; Next Steps</h2></div>
+  <div class="cols cols-3">
+    <div class="card amber">
+      <h3>What We Covered</h3>
+      <ul>
+        <li>Angular architecture &amp; CLI</li>
+        <li>Components, templates, data binding</li>
+        <li>Directives &amp; new control flow</li>
+        <li>Signals &amp; reactive state</li>
+        <li>Services &amp; dependency injection</li>
+        <li>RxJS &amp; Observables</li>
+      </ul>
+    </div>
+    <div class="card green">
+      <h3>Also Covered</h3>
+      <ul>
+        <li>Routing &amp; lazy loading</li>
+        <li>Template &amp; Reactive forms</li>
+        <li>HTTP client &amp; interceptors</li>
+        <li>Pipes (built-in &amp; custom)</li>
+        <li>Component communication</li>
+        <li>Standalone components</li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h3>Production</h3>
+      <ul>
+        <li>Testing with TestBed &amp; Jest</li>
+        <li>AOT &amp; tree shaking</li>
+        <li>esbuild + Vite</li>
+        <li>SSR with Angular Universal</li>
+        <li>Performance optimization</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card blue" style="margin-top:.4em;">
+    <h3>Next Steps &amp; Resources</h3>
+    <div class="cols cols-2">
+      <ul>
+        <li><span class="a">angular.dev</span> — Official docs &amp; tutorials</li>
+        <li><span class="g">Angular Blog</span> — Release announcements</li>
+        <li><span class="p">Angular Material</span> — Component library</li>
+        <li><span class="b">NgRx</span> — State management with Redux pattern</li>
+      </ul>
+      <ul>
+        <li>Build a CRUD app with routing &amp; forms</li>
+        <li>Add authentication with guards</li>
+        <li>Implement state management (NgRx / signals)</li>
+        <li>Deploy with SSR for production</li>
+      </ul>
+    </div>
+  </div>
+  <p style="text-align:center; margin-top:.5em; color:var(--muted); font-size:.5em;">
+    <span class="a">Thank you!</span> &mdash; Built with Reveal.js &middot; Single self-contained HTML file
+  </p>
+</section>
+
+</div><!-- /slides -->
+</div><!-- /reveal -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/monokai.min.css">
+<script>
+Reveal.initialize({
+  hash: true,
+  transition: 'fade',
+  transitionSpeed: 'fast',
+  controls: true,
+  progress: true,
+  center: false,
+  width: 1100,
+  height: 900,
+  margin: 0.01,
+  plugins: [RevealHighlight],
+  highlight: { theme: 'monokai' }
+});
+</script>
+<script>
+(function(){
+  var h = Reveal.getConfig().height || 900;
+  var m = Reveal.getConfig().margin || 0.02;
+  var maxH = Math.floor(h * (1 - 2 * m)) + 'px';
+  function fixSlides(){
+    document.querySelectorAll('.reveal .slides>section,.reveal .slides>section>section').forEach(function(s){
+      s.style.display = 'block';
+      s.style.maxHeight = maxH;
+    });
+  }
+  Reveal.on('ready', fixSlides);
+  Reveal.on('slidechanged', fixSlides);
+})();
+</script>
+</body>
+</html>
